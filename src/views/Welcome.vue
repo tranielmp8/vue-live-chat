@@ -1,8 +1,17 @@
 <template>
   <div class="welcome container">
-      <p>Welcome</p>
-      <SignupForm />
-      <LoginForm />
+    <h1>Welcome</h1>
+    <div v-if="showLogin" class="login">
+      <h2>Login</h2>
+      <LoginForm @login="enterChat" />
+      <p>Need to sign up? <span @click="showLogin = false" >Register</span></p>
+    </div>
+    <div v-else class="signup">
+      <h2>Sign Up</h2>
+      <SignupForm @signup="enterChat" />
+      <p>Already have an account? <span @click="showLogin = true" >Login</span></p>
+    </div>
+      
   </div>
 </template>
 
@@ -10,11 +19,21 @@
 
 import SignupForm from '../components/SignupForm.vue'
 import LoginForm from '../components/LoginForm.vue'
-
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default {
-    components: { SignupForm, LoginForm }
+    components: { SignupForm, LoginForm },
+  setup(){
 
+    const showLogin = ref(true)
+    const router = useRouter()
+    const enterChat = () => {
+      router.push({ name: 'Chatroom' })
+    }
+    
+    return { showLogin, enterChat }
+  }
 
 }
 
@@ -45,4 +64,14 @@ export default {
     color: #999;
     margin: 10px auto;
   }
+  .welcome span {
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .welcome button {
+    margin: 20px;
+  }
+
 </style>
